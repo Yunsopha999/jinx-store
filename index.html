@@ -30,12 +30,11 @@
         </div>
     </section>
 
-    <!-- Products List (Load from Firebase Backend) -->
+    <!-- Products List -->
     <main id="products" class="max-w-md mx-auto px-4 mt-6">
         <h3 class="text-sm font-bold mb-3 text-gray-700">ផលិតផលទាំងអស់</h3>
         
         <div id="product-grid" class="grid grid-cols-2 gap-3">
-            <!-- ពេលកំពុងទាញទិន្នន័យពី Database -->
             <p class="text-xs text-gray-500 col-span-2 text-center py-5">កំពុងទាញទិន្នន័យពី Database...</p>
         </div>
     </main>
@@ -55,32 +54,30 @@
         </div>
     </nav>
 
-    <!-- Firebase SDK (Backend & Database) -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, addf, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // ⚙️ បងត្រូវដាក់ Config របស់ Firebase Project បងនៅទីនេះ
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
+            apiKey: "AIzaSyBKYy312ZnNYWHU20n62yIpOyMbdGhqiK8",
+            authDomain: "project-a9206.firebaseapp.com",
+            projectId: "project-a9206",
+            storageBucket: "project-a9206.firebasestorage.app",
+            messagingSenderId: "425785620921",
+            appId: "1:425785620921:web:f679c97b4d92c42a255e68",
+            measurementId: "G-TfYN3E249K"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ទាញទិន្នន័យផលិតផលពី Firestore Database មកបង្ហាញ
         async function loadProducts() {
             const grid = document.getElementById('product-grid');
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 if(querySnapshot.empty) {
-                    grid.innerHTML = `<p class="text-xs text-gray-400 col-span-2 text-center py-5">មិនទាន់មានទំនិញក្នុង Database ទេ។</p>`;
+                    grid.innerHTML = `<p class="text-xs text-red-400 col-span-2 text-center py-5">រកមិនឃើញ Collection "products" ក្នុង Firebase ទេ!</p>`;
                     return;
                 }
                 
@@ -105,7 +102,7 @@
                 });
             } catch (error) {
                 console.error("Error loading products: ", error);
-                grid.innerHTML = `<p class="text-xs text-red-500 col-span-2 text-center py-5">សូមភ្ជាប់ Firebase Config ជាមុនសិន!</p>`;
+                grid.innerHTML = `<p class="text-xs text-red-500 col-span-2 text-center py-5">មានបញ្ហា kết nối Database: ${error.message}</p>`;
             }
         }
 
