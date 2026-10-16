@@ -97,27 +97,16 @@
                     const price = item.price || 0;
                     const category = item.category || 'ทั่วไป';
                     
-                    // កូដទាញយករូបភាពដែលឆ្លាតវៃ មិនខ្លាចខុសទម្រង់ Firebase
-                    let imagesList = [];
-                    if (item.images) {
-                        if (Array.isArray(item.images)) {
-                            if (item.images.length === 1 && typeof item.images[0] === 'string' && item.images[0].includes(',')) {
-                                imagesList = item.images[0].split(',').map(img => img.trim()).filter(img => img.length > 0);
-                            } else {
-                                imagesList = item.images;
-                            }
-                        } else if (typeof item.images === 'string') {
-                            imagesList = item.images.split(',').map(img => img.trim()).filter(img => img.length > 0);
-                        }
-                    }
-                    if (imagesList.length === 0 && item.image) {
-                        imagesList = [item.image];
-                    }
-                    if (imagesList.length === 0) {
-                        imagesList = ['https://via.placeholder.com/300'];
+                    // កំណត់ Link រូបភាពដោយស្វ័យប្រវត្តិ (បងគ្រាន់តែដាក់ឈ្មោះ ፋይል ក្នុង Firebase ឧទាហរណ៍ 1.jpg)
+                    let imgFileName = item.image || item.images || '1.jpg';
+                    if (typeof imgFileName === 'string' && imgFileName.startsWith('http')) {
+                        // បើដាក់ Link ពេញមកស្រាប់ យកប្រើផ្ទាល់
+                    } else {
+                        // បើដាក់តែឈ្មោះរូប ភ្ជាប់ជាមួយ GitHub Repository របស់បង
+                        imgFileName = `https://yunsopha999.github.io/jinx-store/${imgFileName}`;
                     }
 
-                    const mainImage = imagesList[0];
+                    const imagesList = [imgFileName];
 
                     const card = document.createElement('div');
                     card.className = "bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between cursor-pointer hover:shadow-md transition";
@@ -125,7 +114,7 @@
 
                     card.innerHTML = `
                         <div>
-                            <img src="${mainImage}" alt="${name}" class="w-full h-48 object-cover bg-pink-50">
+                            <img src="${imgFileName}" alt="${name}" class="w-full h-48 object-cover bg-pink-50" onerror="this.src='https://via.placeholder.com/300'">
                             <div class="p-3.5">
                                 <span class="inline-block text-[10px] bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full mb-1">${category}</span>
                                 <h4 class="text-xs font-bold text-gray-800 line-clamp-1">${name}</h4>
@@ -163,7 +152,7 @@
             }
 
             images.forEach(imgUrl => {
-                imageContainer.innerHTML += `<img src="${imgUrl}" class="w-full h-72 object-cover rounded-xl border border-pink-100 shadow-sm">`;
+                imageContainer.innerHTML += `<img src="${imgUrl}" class="w-full h-72 object-cover rounded-xl border border-pink-100 shadow-sm" onerror="this.src='https://via.placeholder.com/300'">`;
             });
             
             document.getElementById('productModal').classList.remove('hidden');
