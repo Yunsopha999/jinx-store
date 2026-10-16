@@ -29,7 +29,7 @@
         <div class="bg-gradient-to-r from-pink-400 to-rose-400 rounded-2xl p-6 text-white shadow-md mb-6">
             <h2 class="text-2xl font-bold mb-1">ឃ្លាំងសម្លៀកបំពាក់កូនក្មេង Jinx</h2>
             <p class="text-sm opacity-90 mb-4">គុណភាពជំនឿចិត្ត មិនរើសាស់ សម្រាប់ក្មេងៗគ្រប់វ័យ។</p>
-            <a href="https://t.me/jinxboutique" target="_blank" class="inline-block bg-white text-pink-600 px-4 py-2 rounded-xl font-bold text-sm shadow">ទិញទំនិញូរដូវនេះ</a>
+            <a href="https://t.me/jinxboutique" target="_blank" class="inline-block bg-white text-pink-600 px-4 py-2 rounded-xl font-bold text-sm shadow">ទិញទំនិញឥឡូវនេះ</a>
         </div>
 
         <h3 class="text-lg font-bold text-gray-800 mb-4">ផលិតផលទាំងអស់</h3>
@@ -68,7 +68,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Configuration របស់បង
         const firebaseConfig = {
             projectId: "project-a9206" 
         };
@@ -97,10 +96,19 @@
                     const name = item.name || 'គ្មានឈ្មោះ';
                     const price = item.price || 0;
                     const category = item.category || 'ทั่วไป';
-                    const mainImage = item.image || (item.images && item.images[0]) || 'https://via.placeholder.com/300';
-                    const imagesList = item.images || [mainImage];
+                    
+                    // បម្លែង String យករูปភាពតាមសញ្ញាក្បៀស (,)
+                    let imagesList = [];
+                    if (item.images) {
+                        imagesList = item.images.split(',').map(img => img.trim());
+                    } else if (item.image) {
+                        imagesList = [item.image];
+                    } else {
+                        imagesList = ['https://via.placeholder.com/300'];
+                    }
 
-                    // បង្កើត Card ទំនិញតាមទម្រង់ដើមដ៏ស្រស់ស្អាត
+                    const mainImage = imagesList[0];
+
                     const card = document.createElement('div');
                     card.className = "bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between cursor-pointer hover:shadow-md transition";
                     card.onclick = () => openProductDetail(name, price, imagesList);
@@ -124,7 +132,7 @@
                 });
             } catch (error) {
                 console.error("Error loading products: ", error);
-                grid.innerHTML = '<p class="col-span-full text-center text-red-400 py-8">មានបញ្ហាក្នុងการទាញទិន្នន័យពី Firebase!</p>';
+                grid.innerHTML = '<p class="col-span-full text-center text-red-400 py-8">មានបញ្ហាក្នុងការទាញទិន្នន័យពី Firebase!</p>';
             }
         }
 
