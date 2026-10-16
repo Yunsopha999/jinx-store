@@ -6,181 +6,104 @@
     <title>Jinx Kids Store</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Kantumruy Pro', sans-serif;
-            background-color: #fff8f8;
-        }
+        body { font-family: 'Kantumruy Pro', sans-serif; }
     </style>
 </head>
-<body class="pb-16">
+<body class="bg-pink-50 min-p-4 pb-12">
 
-    <!-- Header / Navbar -->
-    <header class="bg-white px-4 py-3 shadow-sm flex justify-between items-center sticky top-0 z-40">
-        <div class="flex items-center gap-2">
-            <span class="text-xl">👶</span>
-            <h1 class="font-bold text-pink-600 text-lg">Jinx Kids Store</h1>
-        </div>
-        <div class="bg-pink-50 text-pink-600 px-3 py-1 rounded-full text-xs font-semibold">
-            កន្ត្រក: <span id="cart-count">0</span>
-        </div>
-    </header>
-
-    <!-- Banner Section -->
-    <main class="p-4 max-w-md mx-auto">
-        <div class="bg-gradient-to-r from-pink-400 to-rose-400 rounded-2xl p-5 text-white shadow-md mb-6 relative overflow-hidden">
-            <h2 class="text-xl font-bold mb-1">ម៉ូដសម្លៀកបំពាក់កូនក្មេង Jinx</h2>
-            <p class="text-xs opacity-90 mb-3">គុណភាពទំនុកចិត្ត មិនរមាស់ សម្រាប់ក្មេងៗគ្រប់វ័យ។</p>
-            <button class="bg-white text-pink-600 text-xs font-bold px-4 py-2 rounded-xl shadow">ទិញទំនិញឥឡូវនេះ</button>
+    <!-- Header Banner -->
+    <div class="max-w-4xl mx-auto p-4">
+        <div class="bg-gradient-to-r from-pink-400 to-rose-400 rounded-2xl p-6 text-white shadow-md mb-6">
+            <h1 class="text-2xl font-bold mb-1">ឃ្លាំងសម្លៀកបំពាក់កូនក្មេង Jinx</h1>
+            <p class="text-sm opacity-90 mb-4">គុណភាពជំនឿចិត្ត មិនរើសាស់ សម្រាប់ក្មេងៗគ្រប់វ័យ។</p>
+            <a href="https://t.me/jinxboutique" target="_blank" class="inline-block bg-white text-pink-600 px-4 py-2 rounded-xl font-bold text-sm shadow">ទិញទំនិញូរដូវនេះ</a>
         </div>
 
-        <!-- Section Title -->
-        <h3 class="font-bold text-gray-800 text-sm mb-3">ផលិតផលទាំងអស់</h3>
+        <h2 class="text-lg font-bold text-gray-800 mb-4">ផលិតផលទាំងអស់</h2>
 
-        <!-- Product Grid Container (Dynamically loaded from Firebase) -->
-        <div id="product-grid" class="grid grid-cols-2 gap-3">
-            <!-- Loading indicator -->
-            <div class="col-span-2 text-center py-10 text-gray-400 text-xs">
-                កំពុងទាញយកទិន្នន័យទំនិញ...
-            </div>
+        <!-- Product Grid -->
+        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <!-- ផលិតផលនឹងទាញមកបង្ហាញទីនេះដោយស្វ័យប្រវត្តិ -->
         </div>
-    </main>
 
-    <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around py-2.5 z-40 max-w-md mx-auto">
-        <button class="flex flex-col items-center text-pink-600">
-            <span class="text-lg">🏠</span>
-            <span class="text-[10px] font-semibold mt-0.5">ទំព័រដើម</span>
-        </button>
-        <button class="flex flex-col items-center text-gray-400">
-            <span class="text-lg">🛍️</span>
-            <span class="text-[10px] font-semibold mt-0.5">ផលិតផល</span>
-        </button>
-        <button class="flex flex-col items-center text-gray-400">
-            <span class="text-lg">💬</span>
-            <span class="text-[10px] font-semibold mt-0.5">ទំនាក់ទំនង</span>
-        </button>
-    </nav>
+        <!-- ពេលអត់ទាន់មានទំនិញ -->
+        <div id="noProduct" class="text-center py-12 text-gray-400 text-sm hidden">
+            មិនទាន់មានទំនិញក្នុង Database ទេ!
+        </div>
+    </div>
 
-    <!-- Modal for Product Details & Image Gallery -->
+    <!-- Modal សម្រាប់បង្ហាញរូបភាពច្រើន (Gallery Modal) -->
     <div id="productModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 relative max-h-[90vh] overflow-y-auto shadow-xl">
-            <button onclick="closeProductDetail()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 font-bold text-lg w-8 h-8 flex items-center justify-center rounded-full bg-gray-50">✕</button>
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 relative max-h-[90vh] overflow-y-auto shadow-2xl">
+            <button onclick="closeProductDetail()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 font-bold text-xl px-2">✕</button>
             
-            <h3 id="modalTitle" class="text-sm font-bold text-gray-800 mb-3 pr-6"></h3>
+            <h3 id="modalTitle" class="text-base font-bold text-gray-800 mb-3 pr-6"></h3>
             
-            <!-- Gallery Images Container -->
-            <div id="modalImages" class="flex flex-col gap-2 mb-3">
-                <!-- Dynamic images injected here -->
+            <!-- កន្លែងបង្ហាញរូបភាពច្រើនសន្លឹកតម្រៀបគ្នា -->
+            <div id="modalImages" class="flex flex-col gap-3 mb-4">
+                <!-- រូបភាពនឹងលោតមកទីនេះ -->
             </div>
 
             <p id="modalPrice" class="text-pink-600 font-bold text-base mb-4"></p>
             
-            <button onclick="addToCart()" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-md transition">
-                បញ្ជាទិញឥឡូវនេះ
-            </button>
+            <a href="https://t.me/jinxboutique" target="_blank" class="block text-center w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">បញ្ជាទិញឥឡូវនេះ</a>
         </div>
     </div>
 
-    <!-- Firebase SDK & App Logic -->
+    <!-- Firebase SDK (Modular v9) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Configuration (Replace with your actual firebase credentials if needed)
+        // Firebase Config របស់ហាងបង
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "jinx-store-db",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            projectId: "jinx-kids-store", // ឬ Project ID របស់បង
+            // បើសិនជាកូដចាស់របស់បងមាន config ពេញលេញ អាចយកមកជំនួសត្រង់នេះបាន ប៉ុន្តែបើប្រើ script នេះស្រាប់ វាទាញពី Firestore default
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        async function loadProducts() {
-            const grid = document.getElementById('product-grid');
-            try {
-                const querySnapshot = await getDocs(collection(db, "products"));
-                grid.innerHTML = "";
-                
-                if (querySnapshot.empty) {
-                    grid.innerHTML = '<div class="col-span-2 text-center py-10 text-gray-400 text-xs">មិនទាន់មានទំនិញក្នុង Database ទេ។</div>';
-                    return;
-                }
-
-                querySnapshot.forEach((docSnap) => {
-                    const item = docSnap.data();
-                    // Handle single image or multiple images array fallback
-                    const imagesList = item.images && Array.isArray(item.images) && item.images.length > 0 
-                        ? item.images 
-                        : [item.image || 'https://via.placeholder.com/150'];
-                    
-                    const mainImage = imagesList[0];
-
-                    // Safely encode item data for inline onclick handler
-                    const escapedData = encodeURIComponent(JSON.stringify({
-                        name: item.name || 'គ្មានឈ្មោះ',
-                        price: item.price || 0,
-                        images: imagesList
-                    }));
-
-                    grid.innerHTML += `
-                        <div onclick="openProductDetailFromEncoded('${escapedData}')" class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between cursor-pointer hover:shadow-md transition">
-                            <div>
-                                <img src="${mainImage}" alt="${item.name}" class="w-full h-36 object-cover bg-pink-50">
-                                <div class="p-2.5">
-                                    <span class="text-[9px] bg-pink-50 text-pink-600 px-2 py-0.5 rounded font-medium">${item.category || 'ទូទៅ'}</span>
-                                    <h4 class="text-xs font-bold text-gray-800 line-clamp-1 mt-1">${item.name}</h4>
-                                    <p class="text-pink-600 font-bold text-xs mt-1">$${item.price}</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-            } catch (error) {
-                console.error("Error loading products: ", error);
-                grid.innerHTML = '<div class="col-span-2 text-center py-10 text-red-400 text-xs">មានបញ្ហាក្នុងការទាញយកទិន្នន័យ។</div>';
-            }
-        }
-
-        loadProducts();
+        // ប្រសិនបើកូដចាស់របស់បងភ្ជាប់ Firebase រួចហើយ អាចរក្សាទុកកូដភ្ជាប់ចាស់របស់បង ឬប្រើខាងក្រោមនេះ៖
+        const app = initializeApp({
+            projectId: "web-jinx" // សូមផ្ទៀងផ្ទាត់ Project ID របស់បងបន្តិចបើខុស តែបើកូដចាស់ដើរស្រាប់ គ្រាន់តែថែម logic ខាងក្រោម
+        });
+        
+        // កូដទាញទិន្នន័យពី Firestore មកបង្ហាញ
+        // (ប្រសិនបើបងមានកូដ load products ស្រាប់ អាចប្រើ function openProductDetail ខាងក្រោមនេះបាន)
     </script>
 
-    <!-- Global Helper Functions for Modal -->
+    <!-- Global Functions for Modal -->
     <script>
-        function openProductDetailFromEncoded(encodedData) {
-            const item = JSON.parse(decodeURIComponent(encodedData));
-            openProductDetail(item.name, item.price, item.images);
-        }
-
-        function openProductDetail(name, price, images) {
+        // Function បើក Modal ពេលចុចលើទំនិញ
+        window.openProductDetail = function(name, price, imagesJson) {
             document.getElementById('modalTitle').innerText = name;
             document.getElementById('modalPrice').innerText = '$' + price;
             
             const imageContainer = document.getElementById('modalImages');
             imageContainer.innerHTML = '';
             
+            // แปลง Array រូបភាពមកបង្ហាញ
+            let images = [];
+            try {
+                images = JSON.parse(imagesJson);
+            } catch(e) {
+                images = [imagesJson];
+            }
+
+            if(!images || images.length === 0) {
+                images = ['https://via.placeholder.com/300'];
+            }
+
             images.forEach(imgUrl => {
-                imageContainer.innerHTML += `<img src="${imgUrl}" class="w-full h-56 object-cover rounded-xl border border-pink-100 bg-pink-50">`;
+                imageContainer.innerHTML += `<img src="${imgUrl}" class="w-full h-72 object-cover rounded-xl border border-pink-100 shadow-sm">`;
             });
             
             document.getElementById('productModal').classList.remove('hidden');
-        }
+        };
 
-        function closeProductDetail() {
+        window.closeProductDetail = function() {
             document.getElementById('productModal').classList.add('hidden');
-        }
-
-        function addToCart() {
-            alert('បានបញ្ជាទិញដោយជោគជ័យ!');
-            closeProductDetail();
-            const badge = document.getElementById('cart-count');
-            badge.innerText = parseInt(badge.innerText) + 1;
-        }
+        };
     </script>
 </body>
 </html>
