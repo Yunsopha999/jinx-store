@@ -45,14 +45,14 @@
         </div>
     </div>
 
-    <!-- Modal សម្រាប់បង្ហាញរូបភាពច្រើន (Gallery Modal) -->
+    <!-- Modal សម្រាប់បង្ហាញរូបភាព -->
     <div id="productModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-5 relative max-h-[90vh] overflow-y-auto shadow-2xl">
             <button onclick="closeProductDetail()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 font-bold text-xl px-2">✕</button>
             
             <h3 id="modalTitle" class="text-base font-bold text-gray-800 mb-3 pr-6"></h3>
             
-            <!-- កន្លែងបង្ហាញរូបភាពច្រើនសន្លឹកតម្រៀបគ្នា -->
+            <!-- កន្លែងបង្ហាញរូបភាព -->
             <div id="modalImages" class="flex flex-col gap-3 mb-4">
                 <!-- រូបភាពនឹងលោតមកទីនេះ -->
             </div>
@@ -97,13 +97,19 @@
                     const price = item.price || 0;
                     const category = item.category || 'ทั่วไป';
                     
-                    // បម្លែង String យករูปភាពតាមសញ្ញាក្បៀស (,)
+                    // ទាញយករូបភាពដោយសុវត្ថិភាពបំផុត (មិនឱ្យ Error)
                     let imagesList = [];
                     if (item.images) {
-                        imagesList = item.images.split(',').map(img => img.trim());
-                    } else if (item.image) {
+                        if (Array.isArray(item.images)) {
+                            imagesList = item.images;
+                        } else if (typeof item.images === 'string') {
+                            imagesList = item.images.split(',').map(img => img.trim()).filter(img => img.length > 0);
+                        }
+                    }
+                    if (imagesList.length === 0 && item.image) {
                         imagesList = [item.image];
-                    } else {
+                    }
+                    if (imagesList.length === 0) {
                         imagesList = ['https://via.placeholder.com/300'];
                     }
 
