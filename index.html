@@ -3,70 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jinx - ឃ្លាំងសម្លៀកបំពាក់កូនក្មេង</title>
-    <!-- Tailwind CSS -->
+    <title>Jinx Kids Store</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Kantumruy Pro', sans-serif; }
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background-color: #fff8f8;
+        }
     </style>
 </head>
-<body class="bg-pink-50 text-gray-800 pb-24">
+<body class="pb-16">
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-base font-bold text-pink-600">👶 Jinx Kids Store</h1>
-            <span id="cart-badge" class="text-xs bg-pink-100 text-pink-600 px-2.5 py-1 rounded-full font-medium">កន្រ្តក: 0</span>
+    <!-- Header / Navbar -->
+    <header class="bg-white px-4 py-3 shadow-sm flex justify-between items-center sticky top-0 z-40">
+        <div class="flex items-center gap-2">
+            <span class="text-xl">👶</span>
+            <h1 class="font-bold text-pink-600 text-lg">Jinx Kids Store</h1>
+        </div>
+        <div class="bg-pink-50 text-pink-600 px-3 py-1 rounded-full text-xs font-semibold">
+            កន្ត្រក: <span id="cart-count">0</span>
         </div>
     </header>
 
-    <!-- Banner -->
-    <section class="max-w-md mx-auto px-4 mt-4">
-        <div class="bg-gradient-to-r from-pink-500 to-rose-400 rounded-2xl p-5 text-white shadow-md">
-            <h2 class="text-xl font-bold mb-1">សម្លៀកបំពាក់កូនក្មេង Jinx</h2>
-            <p class="text-xs opacity-90 mb-3">ក្រណាត់ទន់ស្រួលស្លៀក មិនរមាស់ សម្រាប់ក្មេងៗគ្រប់វ័យ។</p>
-            <a href="#products" class="inline-block bg-white text-pink-600 text-xs font-bold px-4 py-2 rounded-lg shadow">ទិញទំនិញឥឡូវនេះ</a>
+    <!-- Banner Section -->
+    <main class="p-4 max-w-md mx-auto">
+        <div class="bg-gradient-to-r from-pink-400 to-rose-400 rounded-2xl p-5 text-white shadow-md mb-6 relative overflow-hidden">
+            <h2 class="text-xl font-bold mb-1">ម៉ូដសម្លៀកបំពាក់កូនក្មេង Jinx</h2>
+            <p class="text-xs opacity-90 mb-3">គុណភាពទំនុកចិត្ត មិនរមាស់ សម្រាប់ក្មេងៗគ្រប់វ័យ។</p>
+            <button class="bg-white text-pink-600 text-xs font-bold px-4 py-2 rounded-xl shadow">ទិញទំនិញឥឡូវនេះ</button>
         </div>
-    </section>
 
-    <!-- Products List -->
-    <main id="products" class="max-w-md mx-auto px-4 mt-6">
-        <h3 class="text-sm font-bold mb-3 text-gray-700">សម្លៀកបំពាក់គ្រប់ម៉ូត</h3>
-        
+        <!-- Section Title -->
+        <h3 class="font-bold text-gray-800 text-sm mb-3">ផលិតផលទាំងអស់</h3>
+
+        <!-- Product Grid Container (Dynamically loaded from Firebase) -->
         <div id="product-grid" class="grid grid-cols-2 gap-3">
-            <p class="text-xs text-gray-500 col-span-2 text-center py-5">សូមរង់ចាំបន្តិច!</p>
+            <!-- Loading indicator -->
+            <div class="col-span-2 text-center py-10 text-gray-400 text-xs">
+                កំពុងទាញយកទិន្នន័យទំនិញ...
+            </div>
         </div>
     </main>
 
     <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-2 shadow-lg z-50">
-        <div class="max-w-md mx-auto flex justify-around text-center">
-            <a href="#" class="text-pink-600 text-xs font-bold flex flex-col items-center">
-                🏠 <span class="mt-0.5">ទំព័រដើម</span>
-            </a>
-            <a href="#products" class="text-gray-400 text-xs font-medium flex flex-col items-center">
-                🛍️ <span class="mt-0.5">ផលិតផល</span>
-            </a>
-            <a href="#" onclick="alert('សូមទាក់ទងមកកាន់ Telegram ហាង Jinx ផ្ទាល់!')" class="text-gray-400 text-xs font-medium flex flex-col items-center">
-                💬 <span class="mt-0.5">ទំនាក់ទំនង</span>
-            </a>
-        </div>
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around py-2.5 z-40 max-w-md mx-auto">
+        <button class="flex flex-col items-center text-pink-600">
+            <span class="text-lg">🏠</span>
+            <span class="text-[10px] font-semibold mt-0.5">ទំព័រដើម</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-400">
+            <span class="text-lg">🛍️</span>
+            <span class="text-[10px] font-semibold mt-0.5">ផលិតផល</span>
+        </button>
+        <button class="flex flex-col items-center text-gray-400">
+            <span class="text-lg">💬</span>
+            <span class="text-[10px] font-semibold mt-0.5">ទំនាក់ទំនង</span>
+        </button>
     </nav>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <!-- Modal for Product Details & Image Gallery -->
+    <div id="productModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-4 relative max-h-[90vh] overflow-y-auto shadow-xl">
+            <button onclick="closeProductDetail()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 font-bold text-lg w-8 h-8 flex items-center justify-center rounded-full bg-gray-50">✕</button>
+            
+            <h3 id="modalTitle" class="text-sm font-bold text-gray-800 mb-3 pr-6"></h3>
+            
+            <!-- Gallery Images Container -->
+            <div id="modalImages" class="flex flex-col gap-2 mb-3">
+                <!-- Dynamic images injected here -->
+            </div>
 
+            <p id="modalPrice" class="text-pink-600 font-bold text-base mb-4"></p>
+            
+            <button onclick="addToCart()" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-xl font-bold text-xs shadow-md transition">
+                បញ្ជាទិញឥឡូវនេះ
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration (Replace with your actual firebase credentials if needed)
         const firebaseConfig = {
-            apiKey: "AIzaSyBKYy312ZnNYWHU20n62yIpOyMbdGhqiK8",
-            authDomain: "project-a9206.firebaseapp.com",
-            projectId: "project-a9206",
-            storageBucket: "project-a9206.firebasestorage.app",
-            messagingSenderId: "425785620921",
-            appId: "1:425785620921:web:f679c97b4d92c42a255e68",
-            measurementId: "G-TfYN3E249K"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "jinx-store-db",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -76,42 +105,81 @@
             const grid = document.getElementById('product-grid');
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
-                if(querySnapshot.empty) {
-                    grid.innerHTML = `<p class="text-xs text-red-400 col-span-2 text-center py-5">រកមិនឃើញ Collection "products" ក្នុង Firebase ទេ!</p>`;
+                grid.innerHTML = "";
+                
+                if (querySnapshot.empty) {
+                    grid.innerHTML = '<div class="col-span-2 text-center py-10 text-gray-400 text-xs">មិនទាន់មានទំនិញក្នុង Database ទេ។</div>';
                     return;
                 }
-                
-                grid.innerHTML = "";
-                querySnapshot.forEach((doc) => {
-                    const item = doc.data();
+
+                querySnapshot.forEach((docSnap) => {
+                    const item = docSnap.data();
+                    // Handle single image or multiple images array fallback
+                    const imagesList = item.images && Array.isArray(item.images) && item.images.length > 0 
+                        ? item.images 
+                        : [item.image || 'https://via.placeholder.com/150'];
+                    
+                    const mainImage = imagesList[0];
+
+                    // Safely encode item data for inline onclick handler
+                    const escapedData = encodeURIComponent(JSON.stringify({
+                        name: item.name || 'គ្មានឈ្មោះ',
+                        price: item.price || 0,
+                        images: imagesList
+                    }));
+
                     grid.innerHTML += `
-                        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between">
+                        <div onclick="openProductDetailFromEncoded('${escapedData}')" class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between cursor-pointer hover:shadow-md transition">
                             <div>
-                                <img src="${item.image || 'https://via.placeholder.com/150'}" alt="${item.name}" class="w-full h-36 object-cover bg-pink-100">
-                                <div class="p-3">
-                                    <span class="text-[10px] bg-pink-50 text-pink-600 px-2 py-0.5 rounded">${item.category || 'ទូទៅ'}</span>
+                                <img src="${mainImage}" alt="${item.name}" class="w-full h-36 object-cover bg-pink-50">
+                                <div class="p-2.5">
+                                    <span class="text-[9px] bg-pink-50 text-pink-600 px-2 py-0.5 rounded font-medium">${item.category || 'ទូទៅ'}</span>
                                     <h4 class="text-xs font-bold text-gray-800 line-clamp-1 mt-1">${item.name}</h4>
                                     <p class="text-pink-600 font-bold text-xs mt-1">$${item.price}</p>
                                 </div>
-                            </div>
-                            <div class="p-3 pt-0">
-                                <button onclick="orderProduct('${item.name}', '${item.price}')" class="w-full bg-pink-600 hover:bg-pink-700 text-white text-xs py-2 rounded-lg font-medium transition">កុម្ម៉ង់ទិញ</button>
                             </div>
                         </div>
                     `;
                 });
             } catch (error) {
                 console.error("Error loading products: ", error);
-                grid.innerHTML = `<p class="text-xs text-red-500 col-span-2 text-center py-5">មានបញ្ហា kết nối Database: ${error.message}</p>`;
+                grid.innerHTML = '<div class="col-span-2 text-center py-10 text-red-400 text-xs">មានបញ្ហាក្នុងការទាញយកទិន្នន័យ។</div>';
             }
         }
 
         loadProducts();
     </script>
 
+    <!-- Global Helper Functions for Modal -->
     <script>
-        function orderProduct(name, price) {
-            alert("បានជ្រើសរើស: " + name + " (តម្លៃ: $" + price + "). សូមឆាតមក Telegram ដើម្បីបញ្ជាក់ទីតាំងដឹកជញ្ជូន!");
+        function openProductDetailFromEncoded(encodedData) {
+            const item = JSON.parse(decodeURIComponent(encodedData));
+            openProductDetail(item.name, item.price, item.images);
+        }
+
+        function openProductDetail(name, price, images) {
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('modalPrice').innerText = '$' + price;
+            
+            const imageContainer = document.getElementById('modalImages');
+            imageContainer.innerHTML = '';
+            
+            images.forEach(imgUrl => {
+                imageContainer.innerHTML += `<img src="${imgUrl}" class="w-full h-56 object-cover rounded-xl border border-pink-100 bg-pink-50">`;
+            });
+            
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function closeProductDetail() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        function addToCart() {
+            alert('បានបញ្ជាទិញដោយជោគជ័យ!');
+            closeProductDetail();
+            const badge = document.getElementById('cart-count');
+            badge.innerText = parseInt(badge.innerText) + 1;
         }
     </script>
 </body>
