@@ -57,7 +57,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Configuration
+        // Firebase Configuration (ប្រើ Project ID ស្វ័យប្រវត្តិតាមស្ដង់ដារ)
         const firebaseConfig = {
             projectId: "web-jinx" 
         };
@@ -68,7 +68,7 @@
         async function loadProducts() {
             const grid = document.getElementById('productGrid');
             const noProduct = document.getElementById('noProduct');
-            grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8">กำลังទាញទិន្នន័យ...</p>';
+            grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8">កំពុងទាញទិន្នន័យ...</p>';
 
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
@@ -108,7 +108,7 @@
                 });
             } catch (error) {
                 console.error("Error loading products: ", error);
-                grid.innerHTML = '<p class="col-span-full text-center text-red-400 py-8">មានបញ្ហាในการទាញទិន្នន័យពី Firebase!</p>';
+                grid.innerHTML = '<p class="col-span-full text-center text-red-400 py-8">មានបញ្ហាក្នុងការទាញទិន្នន័យពី Firebase!</p>';
             }
         }
 
