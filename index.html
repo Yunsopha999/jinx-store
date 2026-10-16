@@ -97,11 +97,15 @@
                     const price = item.price || 0;
                     const category = item.category || 'ทั่วไป';
                     
-                    // ទាញយករូបភាពដោយសុវត្ថិភាពបំផុត (មិនឱ្យ Error)
+                    // កូដទាញយករូបភាពដែលឆ្លាតវៃ មិនខ្លាចខុសទម្រង់ Firebase
                     let imagesList = [];
                     if (item.images) {
                         if (Array.isArray(item.images)) {
-                            imagesList = item.images;
+                            if (item.images.length === 1 && typeof item.images[0] === 'string' && item.images[0].includes(',')) {
+                                imagesList = item.images[0].split(',').map(img => img.trim()).filter(img => img.length > 0);
+                            } else {
+                                imagesList = item.images;
+                            }
                         } else if (typeof item.images === 'string') {
                             imagesList = item.images.split(',').map(img => img.trim()).filter(img => img.length > 0);
                         }
