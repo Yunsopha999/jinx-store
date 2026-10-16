@@ -13,15 +13,26 @@
 </head>
 <body class="bg-pink-50 min-h-screen pb-12">
 
-    <!-- Header Banner -->
-    <div class="max-w-4xl mx-auto p-4">
+    <!-- Header / Navbar -->
+    <div class="max-w-4xl mx-auto p-4 flex justify-between items-center mb-2">
+        <h1 class="text-lg font-bold text-gray-800 flex items-center gap-1.5">
+            <span>👶</span> Jinx Kids Store
+        </h1>
+        <div class="bg-pink-100 text-pink-700 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm">
+            កន្ត្រក: <span id="cartCount">0</span>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto p-4 pt-0">
+        <!-- Header Banner -->
         <div class="bg-gradient-to-r from-pink-400 to-rose-400 rounded-2xl p-6 text-white shadow-md mb-6">
-            <h1 class="text-2xl font-bold mb-1">ឃ្លាំងសម្លៀកបំពាក់កូនក្មេង Jinx</h1>
+            <h2 class="text-2xl font-bold mb-1">ឃ្លាំងសម្លៀកបំពាក់កូនក្មេង Jinx</h2>
             <p class="text-sm opacity-90 mb-4">គុណភាពជំនឿចិត្ត មិនរើសាស់ សម្រាប់ក្មេងៗគ្រប់វ័យ។</p>
-            <a href="https://t.me/jinxboutique" target="_blank" class="inline-block bg-white text-pink-600 px-4 py-2 rounded-xl font-bold text-sm shadow">ទិញទំនិញឥឡូវនេះ</a>
+            <a href="https://t.me/jinxboutique" target="_blank" class="inline-block bg-white text-pink-600 px-4 py-2 rounded-xl font-bold text-sm shadow">ទិញទំនិញូរដូវនេះ</a>
         </div>
 
-        <h2 class="text-lg font-bold text-gray-800 mb-4">ផលិតផលទាំងអស់</h2>
+        <h3 class="text-lg font-bold text-gray-800 mb-4">ផលិតផលទាំងអស់</h3>
 
         <!-- Product Grid -->
         <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -48,7 +59,7 @@
 
             <p id="modalPrice" class="text-pink-600 font-bold text-base mb-4"></p>
             
-            <a href="https://t.me/jinxboutique" target="_blank" class="block text-center w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">បញ្ជាទិញតាម Telegram</a>
+            <a href="https://t.me/jinxboutique" target="_blank" class="block text-center w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">កម្មង់ទិញតាម Telegram</a>
         </div>
     </div>
 
@@ -57,7 +68,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Configuration (ប្រើ Project ID របស់អ្នកបងផ្ទាល់)
+        // Firebase Configuration របស់បង
         const firebaseConfig = {
             projectId: "project-a9206" 
         };
@@ -89,26 +100,31 @@
                     const mainImage = item.image || (item.images && item.images[0]) || 'https://via.placeholder.com/300';
                     const imagesList = item.images || [mainImage];
 
-                    // បង្កើត Card ទំនិញ
+                    // បង្កើត Card ទំនិញតាមទម្រង់ដើមដ៏ស្រស់ស្អាត
                     const card = document.createElement('div');
-                    card.className = "bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between cursor-pointer hover:shadow-md transition";
+                    card.className = "bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between cursor-pointer hover:shadow-md transition";
                     card.onclick = () => openProductDetail(name, price, imagesList);
 
                     card.innerHTML = `
                         <div>
-                            <img src="${mainImage}" alt="${name}" class="w-full h-40 object-cover bg-pink-100">
-                            <div class="p-3">
-                                <span class="text-[10px] bg-pink-50 text-pink-600 px-2 py-0.5 rounded">${category}</span>
-                                <h4 class="text-xs font-bold text-gray-800 line-clamp-1 mt-1">${name}</h4>
-                                <p class="text-pink-600 font-bold text-xs mt-1">$${price}</p>
+                            <img src="${mainImage}" alt="${name}" class="w-full h-48 object-cover bg-pink-50">
+                            <div class="p-3.5">
+                                <span class="inline-block text-[10px] bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full mb-1">${category}</span>
+                                <h4 class="text-xs font-bold text-gray-800 line-clamp-1">${name}</h4>
+                                <p class="text-pink-600 font-bold text-sm mt-1">$${price}</p>
                             </div>
+                        </div>
+                        <div class="p-3.5 pt-0">
+                            <button onclick="event.stopPropagation(); openProductDetail('${name.replace(/'/g, "\\'")}', ${price}, ${JSON.stringify(imagesList).replace(/"/g, '&quot;')})" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                                កម្មង់ទិញ
+                            </button>
                         </div>
                     `;
                     grid.appendChild(card);
                 });
             } catch (error) {
                 console.error("Error loading products: ", error);
-                grid.innerHTML = '<p class="col-span-full text-center text-red-400 py-8">មានបញ្ហាក្នុងការទាញទិន្នន័យពី Firebase!</p>';
+                grid.innerHTML = '<p class="col-span-full text-center text-red-400 py-8">មានបញ្ហាក្នុងการទាញទិន្នន័យពី Firebase!</p>';
             }
         }
 
