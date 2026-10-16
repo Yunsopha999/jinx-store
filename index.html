@@ -11,14 +11,14 @@
         body { font-family: 'Kantumruy Pro', sans-serif; }
     </style>
 </head>
-<body class="bg-pink-50 min-p-4 pb-12">
+<body class="bg-pink-50 min-h-screen pb-12">
 
     <!-- Header Banner -->
     <div class="max-w-4xl mx-auto p-4">
         <div class="bg-gradient-to-r from-pink-400 to-rose-400 rounded-2xl p-6 text-white shadow-md mb-6">
             <h1 class="text-2xl font-bold mb-1">ឃ្លាំងសម្លៀកបំពាក់កូនក្មេង Jinx</h1>
             <p class="text-sm opacity-90 mb-4">គុណភាពជំនឿចិត្ត មិនរើសាស់ សម្រាប់ក្មេងៗគ្រប់វ័យ។</p>
-            <a href="https://t.me/jinxboutique" target="_blank" class="inline-block bg-white text-pink-600 px-4 py-2 rounded-xl font-bold text-sm shadow">ទិញទំនិញូរដូវនេះ</a>
+            <a href="https://t.me/jinxboutique" target="_blank" class="inline-block bg-white text-pink-600 px-4 py-2 rounded-xl font-bold text-sm shadow">ទិញទំនិញឥឡូវនេះ</a>
         </div>
 
         <h2 class="text-lg font-bold text-gray-800 mb-4">ផលិតផលទាំងអស់</h2>
@@ -48,49 +48,83 @@
 
             <p id="modalPrice" class="text-pink-600 font-bold text-base mb-4"></p>
             
-            <a href="https://t.me/jinxboutique" target="_blank" class="block text-center w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">បញ្ជាទិញឥឡូវនេះ</a>
+            <a href="https://t.me/jinxboutique" target="_blank" class="block text-center w-full bg-pink-600 hover:bg-pink-700 text-white py-2.5 rounded-xl font-bold text-sm shadow">បញ្ជាទិញតាម Telegram</a>
         </div>
     </div>
 
-    <!-- Firebase SDK (Modular v9) -->
+    <!-- Firebase SDK & Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Config របស់ហាងបង
+        // Firebase Configuration
         const firebaseConfig = {
-            projectId: "jinx-kids-store", // ឬ Project ID របស់បង
-            // បើសិនជាកូដចាស់របស់បងមាន config ពេញលេញ អាចយកមកជំនួសត្រង់នេះបាន ប៉ុន្តែបើប្រើ script នេះស្រាប់ វាទាញពី Firestore default
+            projectId: "web-jinx" 
         };
 
-        // ប្រសិនបើកូដចាស់របស់បងភ្ជាប់ Firebase រួចហើយ អាចរក្សាទុកកូដភ្ជាប់ចាស់របស់បង ឬប្រើខាងក្រោមនេះ៖
-        const app = initializeApp({
-            projectId: "web-jinx" // សូមផ្ទៀងផ្ទាត់ Project ID របស់បងបន្តិចបើខុស តែបើកូដចាស់ដើរស្រាប់ គ្រាន់តែថែម logic ខាងក្រោម
-        });
-        
-        // កូដទាញទិន្នន័យពី Firestore មកបង្ហាញ
-        // (ប្រសិនបើបងមានកូដ load products ស្រាប់ អាចប្រើ function openProductDetail ខាងក្រោមនេះបាន)
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadProducts() {
+            const grid = document.getElementById('productGrid');
+            const noProduct = document.getElementById('noProduct');
+            grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8">กำลังទាញទិន្នន័យ...</p>';
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "products"));
+                grid.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    noProduct.classList.remove('hidden');
+                    return;
+                }
+
+                noProduct.classList.add('hidden');
+
+                querySnapshot.forEach((doc) => {
+                    const item = doc.data();
+                    const name = item.name || 'គ្មានឈ្មោះ';
+                    const price = item.price || 0;
+                    const category = item.category || 'ทั่วไป';
+                    const mainImage = item.image || (item.images && item.images[0]) || 'https://via.placeholder.com/300';
+                    const imagesList = item.images || [mainImage];
+
+                    // បង្កើត Card ទំនិញ
+                    const card = document.createElement('div');
+                    card.className = "bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 flex flex-col justify-between cursor-pointer hover:shadow-md transition";
+                    card.onclick = () => openProductDetail(name, price, imagesList);
+
+                    card.innerHTML = `
+                        <div>
+                            <img src="${mainImage}" alt="${name}" class="w-full h-40 object-cover bg-pink-100">
+                            <div class="p-3">
+                                <span class="text-[10px] bg-pink-50 text-pink-600 px-2 py-0.5 rounded">${category}</span>
+                                <h4 class="text-xs font-bold text-gray-800 line-clamp-1 mt-1">${name}</h4>
+                                <p class="text-pink-600 font-bold text-xs mt-1">$${price}</p>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Error loading products: ", error);
+                grid.innerHTML = '<p class="col-span-full text-center text-red-400 py-8">មានបញ្ហាในการទាញទិន្នន័យពី Firebase!</p>';
+            }
+        }
+
+        loadProducts();
     </script>
 
     <!-- Global Functions for Modal -->
     <script>
-        // Function បើក Modal ពេលចុចលើទំនិញ
-        window.openProductDetail = function(name, price, imagesJson) {
+        window.openProductDetail = function(name, price, images) {
             document.getElementById('modalTitle').innerText = name;
             document.getElementById('modalPrice').innerText = '$' + price;
             
             const imageContainer = document.getElementById('modalImages');
             imageContainer.innerHTML = '';
             
-            // แปลง Array រូបភាពមកបង្ហាញ
-            let images = [];
-            try {
-                images = JSON.parse(imagesJson);
-            } catch(e) {
-                images = [imagesJson];
-            }
-
-            if(!images || images.length === 0) {
+            if (!images || images.length === 0) {
                 images = ['https://via.placeholder.com/300'];
             }
 
